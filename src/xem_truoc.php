@@ -21,7 +21,7 @@
 			?>
 			<div id="action" style="margin: 20px 0 0 13%;">
             <p class="h3">Khóa học <?php
-            	$sql = "SELECT * from khoa where id_khoa = $id";
+            	$sql = "SELECT * from khoa_hoc where id_khoa = $id";
             	$kq = mysqli_query($conn,$sql)->fetch_assoc();
             	echo $kq['ten_khoa'];
         	?></p>
@@ -30,28 +30,37 @@
 			</div>
             <div   style="margin: 20px 30%;">
                	<?php
-               		$sql = "SELECT * from cau_hoi where id_ch = $idch";
-               		$kq = mysqli_query($conn,$sql)->fetch_assoc();
+               		$sql = "SELECT * FROM options op left join cau_hoi ch on ch.id_ch = op.idQuestion LEFT join dap_an da on op.id = da.idOption WHERE id_ch = $idch";
+               		$kq = mysqli_query($conn ,$sql);
+					$row = $kq->fetch_assoc();
                	?>
+
                 <!-- tên câu hỏi -->
                 <div class="form-group">
-                    <label for="name_quiz"><h4>Câu hỏi: <?php echo $kq['ten_ch']?></h4></label>
+                    <label for="name_quiz"><h4>Câu hỏi: <?php echo $row['ten_ch']?></h4></label>
                 </div>
+
                 <!-- ảnh câu hỏi -->
                 <div class="form-group">
-                    	<?php if($kq['anh_ch'] != ""){
-                    		$link = "../images/".$kq['anh_ch'];
+                    	<?php if($row['anh_ch'] != ""){
+                    		$link = "../images/".$row['anh_ch'];
                     		echo "<img src='".$link."'>";
                     	}
                     ?>
                 </div>
                
                 <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
-                            <div class='input-group-text'>
-                            <input name=''  value='' checked  type='checkbox' readonly>
-                            </div>
-                            <input name='' type='text' class='form-control' 
-                            value="<?php echo $kq['dapan_ch']; ?>" readonly>
+					<div class="form-group">
+						<?php
+							foreach ($kq as $key => $value) {
+								//render đáp án để check xem có duyệt không hoạc xem đáp án
+
+								//dòng nào có giá trị idOption là đáp án nên sẽ tích radio
+								$checked = is_null($value["idOption"]) ? "" : "checked";
+								echo "	<input type='radio' name='' value='' ".$checked."><b> " .$value["name"]. "</b>	<br><br>";
+							}
+						?>
+					</div>
                 </div>
                
             </div>

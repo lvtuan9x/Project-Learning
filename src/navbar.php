@@ -1,7 +1,10 @@
 <?php session_start(); ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">ProjectPHP K71</a>
+    <a class="navbar-brand" href="khoa_hoc.php">ProjectPHP K71</a>
+    <a class="navbar-brand" href="khoa_hoc_danh_sach.php">Quản lý khóa học</a>
+    <a class="navbar-brand" href="tai_khoan.php">Quản lý tài khoản</a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

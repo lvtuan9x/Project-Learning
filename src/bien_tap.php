@@ -43,7 +43,7 @@ if (isset($_POST['dx'])) {
             <p class="h3">Khóa học
                 <?php
                 $id = $_GET['id_khoa_hoc'];
-                $sql = "SELECT * from khoa where id_khoa = $id";
+                $sql = "SELECT * from khoa_hoc where id_khoa = $id";
                 echo mysqli_query($conn, $sql)->fetch_assoc()['ten_khoa'];
                 if (isset($_POST['duyet'])) {
                     $value = $_POST['duyet'];
@@ -66,18 +66,12 @@ if (isset($_POST['dx'])) {
             </p>
             <a href="khoa_hoc.php" class="btn btn-primary">Trở lại</a>
 
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-                Thêm câu hỏi
-            </button>
-            
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="them_cau_hoi.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>">Câu hỏi điền</a></li>
-                <li><a class="dropdown-item" href="them_cau_hoi_1_dap_an.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>">Câu hỏi 1 đáp án</a></li>
-                <li><a class="dropdown-item" href="them_cau_hoi.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>">Câu hỏi nhiều đáp án </a></li>
-                <li><a class="dropdown-item" href="them_cau_hoi.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>">Câu hỏi đúng sai </a></li>
-                <li><a class="dropdown-item" href="them_cau_hoi.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>">Câu hỏi nối </a></li>
-            </ul>
+            <a href="them_cau_hoi.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>" class="btn btn-primary">Thêm câu hỏi</a>
 
+            <a href="luyen_tap.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>" class="btn btn-primary">Luyện tập</a>
+
+            <a href="history.php?id_khoa_hoc=<?php echo $_GET['id_khoa_hoc']; ?>" class="btn btn-primary">Lich sử câu sai</a>
+            
         </div>
         <div class="d-flex flex-wrap flex-column align-items-center" style="padding: 1%;margin: 5% 0 0 0; ">
             <p class="h3">Danh sách câu hỏi</p>
@@ -86,8 +80,6 @@ if (isset($_POST['dx'])) {
                     <tr>
                         <th>STT</th>
                         <th>Tên câu hỏi</th>
-                        <th>Loại câu hỏi</th>
-                        <th>Đáp án</th>
                         <th>Tác giả</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
@@ -98,7 +90,11 @@ if (isset($_POST['dx'])) {
                         $tdn = $_SESSION['tdn'];
                         $sql = "SELECT COUNT(*) from cau_hoi where id_khoa = '$id' AND nguoi_them = '$tdn' ";
                         $kq = mysqli_query($conn, $sql)->fetch_assoc()['COUNT(*)'];
-                        if ($_SESSION['tdn'] == 'admin') {
+
+                        $sql1 = "SELECT vai_tro from tai_khoan where tai_khoan = '$tdn' ";
+                        $role = mysqli_query($conn, $sql1)->fetch_assoc()['vai_tro'];
+
+                        if ($role == 'admin') {
                             $sql = "SELECT * FROM cau_hoi WHERE id_khoa = '$id'";
                             $kq = 1;
                         }
@@ -107,7 +103,7 @@ if (isset($_POST['dx'])) {
                         } else {
                             $dem = 1;
                             $sql = "SELECT * FROM cau_hoi WHERE id_khoa = '$id' AND nguoi_them = '$tdn'";
-                            if ($_SESSION['tdn'] == 'admin') {
+                            if ($role == 'admin') {
                                 $sql = "SELECT * FROM cau_hoi WHERE id_khoa = '$id'";
                             }
                             $kq = mysqli_query($conn, $sql);
@@ -115,11 +111,9 @@ if (isset($_POST['dx'])) {
                                 echo '<tr>';
                                 echo "<td>" . $dem . "</td>";
                                 echo "<td>" . $value['ten_ch'] . "</td>";
-                                echo "<td> Điền </td>";
-                                echo "<td>" . $value['dapan_ch'] . "</td>";
                                 echo "<td>" . $value['nguoi_them'] . "</td>";
                                 echo "<td>" . $value['trang_thai'] . "</td>";
-                                if ($_SESSION['tdn'] != "admin") {
+                                if ($role != "admin") {
                                     echo "<td>";
                                     echo "<button type = submit name = xt value = '".$value['id_ch']."' class='btn btn-primary'>Xem trước</button>";
                                     echo "</td>";
@@ -127,7 +121,7 @@ if (isset($_POST['dx'])) {
                                     echo "<td>";
                                     // echo "<input type = submit name = xt value = '".$value['id_ch']."'class='btn btn-primary'>";
                                     echo "<button type = submit name = xt value = '".$value['id_ch']."'class='btn btn-primary'>Xem trước </button>";
-                                    if ($value['trang_thai'] == 'Chưa duyệt'){
+                                    if ($value['trang_thai'] == 'Chưa Duyệt'){
                                         echo "<button type = submit name = 'duyet' value = '" . $value['id_ch'] . "' class='btn btn-primary' style = 'background:green'>Duyệt</button>";
                                     }
                                     echo "<button type = submit name = 'xoa' value = '" . $value['id_ch'] . "' class='btn btn-primary' style = 'background:red'>Xóa</button>";

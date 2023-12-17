@@ -13,8 +13,7 @@
 <body>
 <?php session_start();include '../function.php' ; ?>
 
-	<div class="alert alert-danger text-center" role="alert">Mẫu:Tài khoản hoặc mật khẩu không chính xác</div>
-	<main style="min-height: 100vh; margin-top: 10%;">
+	<main style="min-height: 70vh; margin-top: 10%;">
 		<div class="d-flex justify-content-center"><h1>Đăng nhập</h1></div>
 		<div class="d-flex justify-content-center">
 			<form class="w-25" method="POST">
@@ -31,13 +30,6 @@
 				<input type="submit" class="btn btn-primary" name="submitLogin" value="Đăng nhập">
 			  </form>
 		</div>
-		<br>
-		<div align="center">
-			  <!-- <div>Tài khoản em để ở trong file db project_k71 ạ</div>
-			  <div>Có 3 tài khoản là : tk1/12345 và tk2/123abc và admin / 12345</div>
-			  <div>Em lưu câu hỏi ở trong bảng cau_hoi của sql ạ</div> -->
-		</div>
-		
 	</main>
 	<?php
 		if(isset($_POST['submitLogin'])){
@@ -50,7 +42,7 @@
 					header("location:khoa_hoc.php");
 					$_SESSION['tdn'] = $tk;
 				} else {
-					echo "Tài khoản hoặc mật khẩu không đúng";
+					echo "<p style='color:red;'>Mẫu:Tài khoản hoặc mật khẩu không chính xác</p>";
 				}
 			}
 		}
